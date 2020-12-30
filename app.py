@@ -4,6 +4,9 @@ app = Flask(__name__)
 
 resp = {"A": 1, "B": "Hi"}
 
+@app.route("/")
+def hello_world():
+    return render_template("index.html")
 
 @app.route('/api/v1/bhavcopy/')
 def get_all():
