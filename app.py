@@ -1,14 +1,26 @@
 from flask import Flask, jsonify, request
 from flask import render_template
 
+from NSEBhavCopyRequestHandler import NSEBhavCopyRequestHandler
+from InvalidReqException import InvalidReqException
 
 app = Flask(__name__)
+app.config['JSON_SORT_KEYS'] = False
 
-resp = {"A": 1, "B": "Hi"}
+nseBhavCopyReqHandler = NSEBhavCopyRequestHandler()
+
+
+@app.errorhandler(InvalidReqException)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
+
 
 @app.route("/")
 def hello_world():
     return render_template("index.html")
+
 
 @app.route('/api/v1/bhavcopy/')
 def get_all():
@@ -21,6 +33,8 @@ def get_all():
         market = request.args['market']
         product = request.args['product']
 
-    resp["market"] = market
-    resp["product"] = product
-    return jsonify(resp)
+    if market.upper() == "NSE":
+        resp = nseBhavCopyReqHandler.get_product_data(product)
+        return jsonify(resp)
+    else:
+        raise InvalidReqException('Invalid Market specified in the request')
