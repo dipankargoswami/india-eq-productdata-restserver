@@ -4,15 +4,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greeting</title>
+    <title>India EQ Product Data REST API| API Documentation</title>
+    <style>
+        div_api {
+            background-color: lightgrey;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        #ParameterDesc {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 60%;
+        }
+
+        #ParameterDesc td, #ParameterDesc th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #ParameterDesc tr:nth-child(even){background-color: #f2f2f2;}
+
+        #ParameterDesc tr:hover {background-color: #ddd;}
+
+        #ParameterDesc th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
-
-    <p>
-        Hello
-    </p>
-
+    <section>
+        <h2>BhavCopy Data</h2>
+        <p>The API provides Bhavcopy data for any specific stock in NSE & BSE. <br/><br/>
+            End Point: <div_api>/api/v1/bhavcopy/</div_api> </p>
+        <table id="ParameterDesc">
+            <tr>
+                <th>Parameter</th>
+                <th>Description</th>
+                <th>Sample values</th>
+                <th>Mandatory</th>
+            </tr>
+            <tr>
+                <td>exchange</td>
+                <td>Exchange for which data is needed</td>
+                <td>Following are the valid values<br/><li>NSE</li><li>BSE</li></td>
+                <td>Y</td>
+            </tr>
+            <tr>
+                <td>stock</td>
+                <td>Stock for which data is needed</td>
+                <td>
+                    <li>NSE-</li>&nbsp;&nbsp;Symbol. e.g. INFY
+                    <li>BSE-</li>&nbsp;&nbsp;Numeric Scrip code. e.g. 500002
+                </td>
+                <td>Y</td>
+            </tr>
+        </table>
+        <br/><br/>Example: <div_api>/api/v1/bhavcopy/?exchange=NSE&stock=INFY</div_api>
+    </section>
 </body>
 
 </html>

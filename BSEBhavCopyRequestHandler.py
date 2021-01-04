@@ -1,3 +1,5 @@
+import urllib
+
 import pandas as pd
 from io import BytesIO
 from zipfile import ZipFile
@@ -7,24 +9,25 @@ import MiscProductDataUtility
 from InvalidReqException import InvalidReqException
 
 
-class NSEBhavCopyRequestHandler:
+class BSEBhavCopyRequestHandler:
     def __init__(self):
         self.newdf = None
-        self.current_filename = MiscProductDataUtility.get_nse_bhavcopy_filename()
+        self.current_filename = MiscProductDataUtility.get_bse_bhavcopy_filename()
         self.download_file()
 
     def get_product_data(self, product):
 
         print("Retrieving details for the product [{}]".format(product))
 
-        new_filename = MiscProductDataUtility.get_nse_bhavcopy_filename()
+        new_filename = MiscProductDataUtility.get_bse_bhavcopy_filename()
         if new_filename != self.current_filename:
             self.current_filename = new_filename
             self.download_file()
 
-        resp = {"market": "NSE", "product": product}
+        resp = {"market": "BSE", "product": product}
         try:
             sd = self.newdf.loc[product]
+            resp["name"] = sd["SC_NAME"]
             resp["open"] = sd["OPEN"]
             resp["high"] = sd["HIGH"]
             resp["low"] = sd["LOW"]
@@ -36,13 +39,10 @@ class NSEBhavCopyRequestHandler:
         return resp
 
     def download_file(self):
-        month = self.current_filename[4:7]
-        year = self.current_filename[7:11]
-        file_download_url = f'https://archives.nseindia.com/content/historical/EQUITIES/' \
-                            f'{year}/{month}/{self.current_filename}.zip'
+        file_download_url = f'https://www.bseindia.com/download/BhavCopy/Equity/{self.current_filename}_CSV.ZIP'
         print("Downloading {}".format(file_download_url))
-        url = urlopen(file_download_url)
+        page = urllib.request.Request(file_download_url, headers={'User-Agent': 'Mozilla/5.0'})
+        url = urlopen(page)
         zipfile = ZipFile(BytesIO(url.read()))
 
-        cereal_df = pd.read_csv(zipfile.open(self.current_filename), index_col=0)
-        self.newdf = cereal_df.loc[(cereal_df.SERIES == "EQ")]
+        self.newdf = pd.read_csv(zipfile.open(f'{self.current_filename}.CSV'), index_col=0)

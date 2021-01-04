@@ -2,12 +2,14 @@ from flask import Flask, jsonify, request
 from flask import render_template
 
 from NSEBhavCopyRequestHandler import NSEBhavCopyRequestHandler
+from BSEBhavCopyRequestHandler import BSEBhavCopyRequestHandler
 from InvalidReqException import InvalidReqException
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 
 nseBhavCopyReqHandler = NSEBhavCopyRequestHandler()
+bseBhavCopyReqHandler = BSEBhavCopyRequestHandler()
 
 
 @app.errorhandler(InvalidReqException)
@@ -27,14 +29,17 @@ def get_all():
     market = ""
     product = ""
 
-    if 'market' not in request.args or 'product' not in request.args:
-        return "Error: No market or product field provided. Please specify a market and a product."
-    if 'product' in request.args:
-        market = request.args['market']
-        product = request.args['product']
+    if 'exchange' not in request.args or 'stock' not in request.args:
+        return "Error: No exchange or stock field provided. Please specify a market and a product."
+    if 'stock' in request.args:
+        market = request.args['exchange']
+        product = request.args['stock']
 
     if market.upper() == "NSE":
         resp = nseBhavCopyReqHandler.get_product_data(product)
+        return jsonify(resp)
+    elif market.upper() == "BSE":
+        resp = bseBhavCopyReqHandler.get_product_data(int(product))
         return jsonify(resp)
     else:
         raise InvalidReqException('Invalid Market specified in the request')

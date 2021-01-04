@@ -1,0 +1,6 @@
+spec:
+  services:
+    - name: india-eq-productdata-restserver
+      git:
+        branch: main
+        repo_clone_url: https://github.com/dipankargoswami/india-eq-productdata-restserver.git
