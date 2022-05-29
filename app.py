@@ -36,7 +36,7 @@ def get_all():
         product = request.args['stock']
 
     if market.upper() == "NSE":
-        resp = nseBhavCopyReqHandler.get_product_data(product)
+        resp = nseBhavCopyReqHandler.get_product_data(product.upper())
         return jsonify(resp)
     elif market.upper() == "BSE":
         resp = bseBhavCopyReqHandler.get_product_data(int(product))
