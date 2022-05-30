@@ -24,18 +24,19 @@ class BSEBhavCopyRequestHandler:
             self.current_filename = new_filename
             self.download_file()
 
-        resp = {"market": "BSE", "product": product}
+        product_detail = {"product": product}
         try:
             sd = self.newdf.loc[product]
-            resp["name"] = sd["SC_NAME"]
-            resp["open"] = sd["OPEN"]
-            resp["high"] = sd["HIGH"]
-            resp["low"] = sd["LOW"]
-            resp["close"] = sd["CLOSE"]
-            resp["last"] = sd["LAST"]
+            product_detail["name"] = sd["SC_NAME"]
+            product_detail["open"] = sd["OPEN"]
+            product_detail["high"] = sd["HIGH"]
+            product_detail["low"] = sd["LOW"]
+            product_detail["close"] = sd["CLOSE"]
+            product_detail["last"] = sd["LAST"]
         except KeyError:
             print("No detail found for the product [{}]".format(product))
             raise InvalidReqException('No Product Found')
+        resp = {"BSE": product_detail}
         return resp
 
     def download_file(self):
