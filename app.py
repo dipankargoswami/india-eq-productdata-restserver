@@ -26,14 +26,11 @@ def hello_world():
 
 @app.route('/api/v1/bhavcopy/')
 def get_all():
-    market = ""
-    product = ""
 
     if 'exchange' not in request.args or 'stock' not in request.args:
         return "Error: No exchange or stock field provided. Please specify a market and a product."
-    if 'stock' in request.args:
-        market = request.args['exchange']
-        product = request.args['stock']
+    market = request.args['exchange']
+    product = request.args['stock']
 
     if market.upper() == "NSE":
         resp = nseBhavCopyReqHandler.get_product_data(product.upper())
