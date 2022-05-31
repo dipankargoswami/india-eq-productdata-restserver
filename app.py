@@ -36,6 +36,8 @@ def get_all():
         resp = nseBhavCopyReqHandler.get_product_data(product.upper())
         return jsonify(resp)
     elif market.upper() == "BSE":
+        if not product.isnumeric():
+            raise InvalidReqException('Must provide numeric scripcode')
         resp = bseBhavCopyReqHandler.get_product_data(int(product))
         return jsonify(resp)
     else:

@@ -27,7 +27,7 @@ class BSEBhavCopyRequestHandler:
         product_detail = {"product": product}
         try:
             sd = self.newdf.loc[product]
-            product_detail["name"] = sd["SC_NAME"]
+            product_detail["name"] = sd["SC_NAME"].rstrip()
             product_detail["open"] = sd["OPEN"]
             product_detail["high"] = sd["HIGH"]
             product_detail["low"] = sd["LOW"]
