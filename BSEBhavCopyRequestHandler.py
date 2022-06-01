@@ -24,7 +24,7 @@ class BSEBhavCopyRequestHandler:
             self.current_filename = new_filename
             self.download_file()
 
-        product_detail = {"product": product}
+        product_detail = {"market": "BSE", "product": product}
         try:
             sd = self.newdf.loc[product]
             product_detail["name"] = sd["SC_NAME"].rstrip()
@@ -36,8 +36,7 @@ class BSEBhavCopyRequestHandler:
         except KeyError:
             print("No detail found for the product [{}]".format(product))
             raise InvalidReqException('No Product Found')
-        resp = {"BSE": product_detail}
-        return resp
+        return product_detail
 
     def download_file(self):
         file_download_url = f'https://www.bseindia.com/download/BhavCopy/Equity/{self.current_filename}_CSV.ZIP'

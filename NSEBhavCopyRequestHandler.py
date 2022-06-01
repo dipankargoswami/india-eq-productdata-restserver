@@ -22,7 +22,7 @@ class NSEBhavCopyRequestHandler:
             self.current_filename = new_filename
             self.download_file()
 
-        product_detail = {"product": product}
+        product_detail = {"market": "NSE", "product": product}
         try:
             sd = self.newdf.loc[product]
             product_detail["open"] = sd["OPEN"]
@@ -33,8 +33,7 @@ class NSEBhavCopyRequestHandler:
         except KeyError:
             print("No detail found for the product [{}]".format(product))
             raise InvalidReqException('No Product Found')
-        resp = {"NSE": product_detail}
-        return resp
+        return product_detail
 
     def download_file(self):
         month = self.current_filename[4:7]

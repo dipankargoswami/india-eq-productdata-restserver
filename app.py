@@ -28,17 +28,20 @@ def hello_world():
 def get_all():
 
     if 'exchange' not in request.args or 'stock' not in request.args:
-        return "Error: No exchange or stock field provided. Please specify a market and a product."
+        raise InvalidReqException("Error: No exchange or stock field provided. Please specify a market and a product.")
     market = request.args['exchange']
     product = request.args['stock']
 
+    final_resp = {"results": []}
     if market.upper() == "NSE":
         resp = nseBhavCopyReqHandler.get_product_data(product.upper())
-        return jsonify(resp)
+        final_resp.get("results").append(resp)
+        return jsonify(final_resp)
     elif market.upper() == "BSE":
         if not product.isnumeric():
             raise InvalidReqException('Must provide numeric scripcode')
         resp = bseBhavCopyReqHandler.get_product_data(int(product))
-        return jsonify(resp)
+        final_resp.get("results").append(resp)
+        return jsonify(final_resp)
     else:
         raise InvalidReqException('Invalid Market specified in the request')
